@@ -63,5 +63,9 @@ driver.execute_script("window.scrollBy(0,700)","")
 
 driver.find_element(By.XPATH,"(//input[@id='save_settings'])[1]").click()
 
-#Click Settings
+#Click Wp Dark Mode
 driver.find_element(By.XPATH,"//div[normalize-space()='Settings']").click()
+#Click General Settings
+driver.find_element(By.XPATH,"(//span[contains(text(),'General Settings')])[1]").click()
+#Enable Backend Darkmode
+driver.find_element(By.XPATH,"(//label[@for='wppool-wp_dark_mode_general[enable_backend]'])[2]").click()
