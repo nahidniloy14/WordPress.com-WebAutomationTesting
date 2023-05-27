@@ -1,6 +1,7 @@
 import time
 
 from selenium import webdriver
+from selenium.webdriver import Keys
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium import webdriver
@@ -37,6 +38,30 @@ driver.find_element(By.XPATH,"//input[@id='identifierId']").send_keys("nahidnilo
 # Submit
 driver.find_element(By.XPATH,"//div[@id='view_container']/div/div/div[2]/div/div[2]/div/div[1]/div/div").click()
 # Scroll down
-driver.execute_script("window.scrollBy(0,7000)","")
-#Click Explore Plugin
+driver.execute_script("window.scrollBy(0,500)","")
+#ClickPlugin
 driver.find_element(By.XPATH,"//div[@class='quick-links__boxes']/a[8]/div/span").click()
+#addnew
+driver.find_element(By.XPATH,"//a[@class='page-title-action']").click()
+#Click the Search Icon
+driver.find_element(By.XPATH,"//div/main/div[1]/div/div/div/button[1]")
+#Search WP dark mode
+driver.find_element(By.CLASS_NAME,"search-component__input-fade").send_keys("WP dark mode")
+#Press Enter
+driver.find_element(By.CLASS_NAME,"search-component__input-fade").send_keys(Keys.ENTER)
+
+#Select WP Dark Mode
+driver.find_element(By.XPATH,"//div[@class='card plugins-browser-list__elements']/li[1]").click()
+
+#Install
+driver.find_element(By.XPATH,"(//ul[@class='plugin-action-buttons'])[1]/li[1]").click()
+
+#Activate
+driver.find_element(By.XPATH,"(//ul[@class='plugin-action-buttons'])[1]/li[1]").click()
+
+driver.execute_script("window.scrollBy(0,700)","")
+
+driver.find_element(By.XPATH,"(//input[@id='save_settings'])[1]").click()
+
+#Click Settings
+driver.find_element(By.XPATH,"//div[normalize-space()='Settings']").click()
