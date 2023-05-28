@@ -6,6 +6,7 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.support.select import Select
 
 serviceObject = Service("C:\Driver\chromedriver.exe")
 
@@ -98,7 +99,7 @@ driver.find_element(By.XPATH,"//a[@id='wp_dark_mode_switch-tab']//span[contains(
 #change floating style
 driver.find_element(By.XPATH,"//input[@id='wppool-wp_dark_mode_switch[switch_style][3]'])[1]").click()
 
-#Select Custom Switch size & Scale it to 220
+#8.Select Custom Switch size & Scale it to 220
 #select custom size
 driver.find_element(By.XPATH,"(//input[@id='wppool-wp_dark_mode_switch[switch_style][3]'])[1]").click()
 scale_slider=driver.find_element(By.XPATH,"(//input[@id='wp_dark_mode_switch[switcher_scale]'])[1]").get_property('value')
@@ -106,3 +107,6 @@ scale_value=int(scale_slider.get_attribute("value"))
 if scale_value != 200:
     driver.execute_script("arguments[0].setAttribute('value', '200')", scale_slider)
 
+#9.From Settings -> Switch Settings - Change the Floating Switch Position (Left Bottom).
+dropdown=Select(driver.find_element(By.ID,"wp_dark_mode_switch[switcher_position]"))
+dropdown.select_by_visible_text("Left Bottom")
