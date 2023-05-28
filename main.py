@@ -13,7 +13,7 @@ driver = webdriver.Chrome(service=serviceObject)
 
 driver.get("https://wordpress.com/log-in/")
 
-
+#1Log in to your WordPress site.
 #SIGN UP
 driver.get("https://wordpress.com/")
 driver.find_element(By.XPATH,"//nav/ul[2]/li[2]/a").click()
@@ -36,6 +36,10 @@ print(driver.current_window_handle)
 # email input
 driver.find_element(By.XPATH,"//input[@id='identifierId']").send_keys("nahidniloy894@gmail.com")
 # Submit
+
+
+
+#2. Check whether the “WP Dark Mode” Plugin is Active or not.
 driver.find_element(By.XPATH,"//div[@id='view_container']/div/div/div[2]/div/div[2]/div/div[1]/div/div").click()
 # Scroll down
 driver.execute_script("window.scrollBy(0,500)","")
@@ -53,6 +57,8 @@ driver.find_element(By.CLASS_NAME,"search-component__input-fade").send_keys(Keys
 #Select WP Dark Mode
 driver.find_element(By.XPATH,"//div[@class='card plugins-browser-list__elements']/li[1]").click()
 
+
+#3.If Active, navigate to the WP Dark Mode & continue. Otherwise, Install the Plugin and Activate it.
 #Install
 driver.find_element(By.XPATH,"(//ul[@class='plugin-action-buttons'])[1]/li[1]").click()
 
@@ -63,13 +69,18 @@ driver.execute_script("window.scrollBy(0,700)","")
 
 driver.find_element(By.XPATH,"(//input[@id='save_settings'])[1]").click()
 
+
 #Click Wp Dark Mode
 driver.find_element(By.XPATH,"//div[normalize-space()='Settings']").click()
+
+#4.Enable Backend Darkmode from Settings -> General Settings.
 #Click General Settings
 driver.find_element(By.XPATH,"(//span[contains(text(),'General Settings')])[1]").click()
 #Enable Backend Darkmode
 driver.find_element(By.XPATH,"(//label[@for='wppool-wp_dark_mode_general[enable_backend]'])[2]").click()
-#valdiate the dark made working on admin dash
+
+
+#5.valdiate the dark made working on admin dashboard
 toggle_button=driver.find_element(By.XPATH,"wppool-wp_dark_mode_general[enable_frontend]")
 dark_mode_active=toggle_button.is_selected()
 if dark_mode_active:
@@ -77,3 +88,15 @@ if dark_mode_active:
 else:
     print("Dark mode is not active.")
 
+#6.Navigate to the WP Dark Mode.
+driver.find_element(By.XPATH,"//div[normalize-space()='WP Dark Mode']").click()
+
+
+#7. From Settings -> Switch Settings - Change the “Floating Switch Style” from the default selections (Select any one from the available options, except the default selected one).
+#select switch setting
+driver.find_element(By.XPATH,"//a[@id='wp_dark_mode_switch-tab']//span[contains(text(),'Switch Settings')]").click()
+#change floating style
+driver.find_element(By.XPATH,"//input[@id='wppool-wp_dark_mode_switch[switch_style][3]'])[1]").click()
+
+#Select Custom Switch size & Scale it to 220
+#select custom size
