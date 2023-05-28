@@ -100,3 +100,9 @@ driver.find_element(By.XPATH,"//input[@id='wppool-wp_dark_mode_switch[switch_sty
 
 #Select Custom Switch size & Scale it to 220
 #select custom size
+driver.find_element(By.XPATH,"(//input[@id='wppool-wp_dark_mode_switch[switch_style][3]'])[1]").click()
+scale_slider=driver.find_element(By.XPATH,"(//input[@id='wp_dark_mode_switch[switcher_scale]'])[1]").get_property('value')
+scale_value=int(scale_slider.get_attribute("value"))
+if scale_value != 200:
+    driver.execute_script("arguments[0].setAttribute('value', '200')", scale_slider)
+
