@@ -82,12 +82,12 @@ driver.find_element(By.XPATH,"(//label[@for='wppool-wp_dark_mode_general[enable_
 
 
 #5.valdiate the dark made working on admin dashboard
-toggle_button=driver.find_element(By.XPATH,"wppool-wp_dark_mode_general[enable_frontend]")
-dark_mode_active=toggle_button.is_selected()
-if dark_mode_active:
-    print("Dark mode is active.")
+dark_mode_button = driver.find_element(By.XPATH,"(//div[@class='wp-dark-mode-ignore'])[2]")
+is_dark_mode_enabled = dark_mode_button.is_selected()
+if is_dark_mode_enabled:
+    print("Dark mode is enabled.")
 else:
-    print("Dark mode is not active.")
+    print("Dark mode is disabled.")
 
 #6.Navigate to the WP Dark Mode.
 driver.find_element(By.XPATH,"//div[normalize-space()='WP Dark Mode']").click()
@@ -110,7 +110,29 @@ if scale_value != 200:
 #9.From Settings -> Switch Settings - Change the Floating Switch Position (Left Bottom).
 dropdown=Select(driver.find_element(By.ID,"wp_dark_mode_switch[switcher_position]"))
 dropdown.select_by_visible_text("Left Bottom")
+driver.find_element(By.ID,"save_settings").click()
+
 
 #10.Disable Keyboard Shortcut from the Accessibility Settings.
 driver.find_element(By.XPATH,"(//span[contains(text(),'Accessibility Settings')])[1]").click()
 driver.find_element(By.XPATH,"(//div[@class='wp-dark-mode-ignore'])[23]").click()
+driver.find_element(By.ID,"save_settings").click()
+
+#11. From Settings -> Animation - Enable “Darkmode Toggle Animation” & change the “Animation Effect
+driver.find_element(By.ID,"wp_dark_mode_animation-tab").click()
+driver.find_element(By.ID,"save_settings").click()
+#Enable Dark Mode Toggle Animation
+driver.find_element(By.XPATH,"(//div[@class='wp-dark-mode-ignore'])[30]").click()
+dropdown=Select(driver.find_element(By.XPATH,"(//select[@id='wp_dark_mode_animation[animation]'])[1]"))
+#Change Animation
+dropdown.select_by_visible_text("Side Left")
+driver.find_element(By.ID,"save_settings").click()
+
+#12.Validate whether the Darkmode is working or not from the Frontend.
+toggle_button=driver.find_element(By.XPATH,"wppool-wp_dark_mode_general[enable_frontend]")
+dark_mode_active=toggle_button.is_selected()
+if dark_mode_active:
+    print("Dark mode is active.")
+else:
+    print("Dark mode is not active.")
+
