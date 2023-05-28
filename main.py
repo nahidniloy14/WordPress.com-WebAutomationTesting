@@ -110,3 +110,7 @@ if scale_value != 200:
 #9.From Settings -> Switch Settings - Change the Floating Switch Position (Left Bottom).
 dropdown=Select(driver.find_element(By.ID,"wp_dark_mode_switch[switcher_position]"))
 dropdown.select_by_visible_text("Left Bottom")
+
+#10.Disable Keyboard Shortcut from the Accessibility Settings.
+driver.find_element(By.XPATH,"(//span[contains(text(),'Accessibility Settings')])[1]").click()
+driver.find_element(By.XPATH,"(//div[@class='wp-dark-mode-ignore'])[23]").click()
