@@ -1,138 +1,103 @@
 import time
-
+import os
+from dotenv import load_dotenv
 from selenium import webdriver
-from selenium.webdriver import Keys
-from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
-from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.select import Select
+from webdriver_manager.chrome import ChromeDriverManager
 
-serviceObject = Service("C:\Driver\chromedriver.exe")
-
-driver = webdriver.Chrome(service=serviceObject)
-
-driver.get("https://wordpress.com/log-in/")
-
-#1Log in to your WordPress site.
-#SIGN UP
-driver.get("https://wordpress.com/")
-driver.find_element(By.XPATH,"//nav/ul[2]/li[2]/a").click()
-
-time.sleep(10)
-driver.find_element(By.ID,"email").send_keys("pivil17463@duscore.com")
-driver.find_element(By.ID,"username").send_keys("pivil174")
-driver.find_element(By.ID,"password").send_keys("p7k3f58C%$.rs4p")
+chrome_options = Options()
+driver = webdriver.Chrome(ChromeDriverManager().install(), options=chrome_options)
 driver.maximize_window()
-driver.find_element(By.XPATH,"//div/form/div[2]/button").click()
-
-#LOG IN
-driver.find_element(By.CLASS_NAME, "form-text-input").send_keys("nahidniloy894@gmail.com")
-time.sleep(8)
-driver.find_element(By.CSS_SELECTOR, "button[type='submit']").click()
-
-driver.find_element(By.CLASS_NAME,"social-buttons__service-name").click()
-print(driver.current_window_handle)
-
-# email input
-driver.find_element(By.XPATH,"//input[@id='identifierId']").send_keys("nahidniloy894@gmail.com")
-# Submit
+load_dotenv()
 
 
+# Access the login information
+username = os.getenv('USERNAME')
+password = os.getenv('PASSWORD')
 
-#2. Check whether the “WP Dark Mode” Plugin is Active or not.
-driver.find_element(By.XPATH,"//div[@id='view_container']/div/div/div[2]/div/div[2]/div/div[1]/div/div").click()
-# Scroll down
-driver.execute_script("window.scrollBy(0,500)","")
-#ClickPlugin
-driver.find_element(By.XPATH,"//div[@class='quick-links__boxes']/a[8]/div/span").click()
-#addnew
-driver.find_element(By.XPATH,"//a[@class='page-title-action']").click()
-#Click the Search Icon
-driver.find_element(By.XPATH,"//div/main/div[1]/div/div/div/button[1]")
-#Search WP dark mode
-driver.find_element(By.CLASS_NAME,"search-component__input-fade").send_keys("WP dark mode")
-#Press Enter
-driver.find_element(By.CLASS_NAME,"search-component__input-fade").send_keys(Keys.ENTER)
+#Log in to your WordPress site
+driver.get("https://dev-daredreamdo.pantheonsite.io/wp-login.php")
 
-#Select WP Dark Mode
-driver.find_element(By.XPATH,"//div[@class='card plugins-browser-list__elements']/li[1]").click()
-
-
-#3.If Active, navigate to the WP Dark Mode & continue. Otherwise, Install the Plugin and Activate it.
-#Install
-driver.find_element(By.XPATH,"(//ul[@class='plugin-action-buttons'])[1]/li[1]").click()
-
-#Activate
-driver.find_element(By.XPATH,"(//ul[@class='plugin-action-buttons'])[1]/li[1]").click()
-
+driver.find_element(By.ID,"user_login").send_keys(username)
+driver.find_element(By.ID,"user_pass").send_keys(password)
+driver.find_element(By.ID,"wp-submit").click()
+time.sleep(5)
+#Check whether the “WP Dark Mode” Plugin is Active or not.
+driver.find_element(By.XPATH,"(//div[@class='wp-menu-name'])[8]").click()
+driver.find_element(By.XPATH,"//ul[@class='subsubsub']/li[2]").click()
 driver.execute_script("window.scrollBy(0,700)","")
-
-driver.find_element(By.XPATH,"(//input[@id='save_settings'])[1]").click()
-
-
-#Click Wp Dark Mode
-driver.find_element(By.XPATH,"//div[normalize-space()='Settings']").click()
-
-#4.Enable Backend Darkmode from Settings -> General Settings.
-#Click General Settings
-driver.find_element(By.XPATH,"(//span[contains(text(),'General Settings')])[1]").click()
-#Enable Backend Darkmode
-driver.find_element(By.XPATH,"(//label[@for='wppool-wp_dark_mode_general[enable_backend]'])[2]").click()
-
-
-#5.valdiate the dark made working on admin dashboard
-dark_mode_button = driver.find_element(By.XPATH,"(//div[@class='wp-dark-mode-ignore'])[2]")
-is_dark_mode_enabled = dark_mode_button.is_selected()
-if is_dark_mode_enabled:
-    print("Dark mode is enabled.")
+time.sleep(5)
+element=driver.find_element(By.XPATH,"//a[@id='deactivate-wp-dark-mode']").text
+#text=print(element)
+if element == "Deactivate":
+    print("Plugin Installed")
 else:
-    print("Dark mode is disabled.")
+    print("Plugin Not Installed")
+#assert element == "Deactivate"
 
-#6.Navigate to the WP Dark Mode.
+#If active: navigate to the WP Dark Mode & continue
 driver.find_element(By.XPATH,"//div[normalize-space()='WP Dark Mode']").click()
 
+#Enable Backend Darkmode from Settings -> General Settings.
+driver.find_element(By.XPATH,"(//div[@class='wp-dark-mode-ignore'])[2]").click()
+driver.find_element(By.XPATH,"(//input[@id='save_settings'])[1]").click()
+driver.find_element(By.XPATH,"(//p[@class='dark wp-dark-mode-ignore'])[1]").click()
 
-#7. From Settings -> Switch Settings - Change the “Floating Switch Style” from the default selections (Select any one from the available options, except the default selected one).
-#select switch setting
+#Navigate to the WP Dark Mode.
+driver.find_element(By.XPATH,"//div[normalize-space()='WP Dark Mode']").click()
+"""
+#From Switch Settings - Change the “Floating Switch Style” 
 driver.find_element(By.XPATH,"//a[@id='wp_dark_mode_switch-tab']//span[contains(text(),'Switch Settings')]").click()
 #change floating style
 driver.find_element(By.XPATH,"//input[@id='wppool-wp_dark_mode_switch[switch_style][3]'])[1]").click()
 
-#8.Select Custom Switch size & Scale it to 220
-#select custom size
+#Select Custom Switch size & Scale it to 220.
 driver.find_element(By.XPATH,"(//input[@id='wppool-wp_dark_mode_switch[switch_style][3]'])[1]").click()
 scale_slider=driver.find_element(By.XPATH,"(//input[@id='wp_dark_mode_switch[switcher_scale]'])[1]").get_property('value')
 scale_value=int(scale_slider.get_attribute("value"))
 if scale_value != 200:
     driver.execute_script("arguments[0].setAttribute('value', '200')", scale_slider)
 
-#9.From Settings -> Switch Settings - Change the Floating Switch Position (Left Bottom).
+#Change the Floating Switch Position (Left Bottom)
 dropdown=Select(driver.find_element(By.ID,"wp_dark_mode_switch[switcher_position]"))
 dropdown.select_by_visible_text("Left Bottom")
 driver.find_element(By.ID,"save_settings").click()
-
-
-#10.Disable Keyboard Shortcut from the Accessibility Settings.
+"""
+#Disable Keyboard Shortcut from the Accessibility Settings.
 driver.find_element(By.XPATH,"(//span[contains(text(),'Accessibility Settings')])[1]").click()
+driver.execute_script("window.scrollBy(0,700)","")
+time.sleep(7)
 driver.find_element(By.XPATH,"(//div[@class='wp-dark-mode-ignore'])[23]").click()
-driver.find_element(By.ID,"save_settings").click()
+time.sleep(5)
+driver.find_element(By.XPATH,"(//input[@id='save_settings'])[8]").click()
+time.sleep(5)
 
-#11. From Settings -> Animation - Enable “Darkmode Toggle Animation” & change the “Animation Effect
-driver.find_element(By.ID,"wp_dark_mode_animation-tab").click()
-driver.find_element(By.ID,"save_settings").click()
-#Enable Dark Mode Toggle Animation
-driver.find_element(By.XPATH,"(//div[@class='wp-dark-mode-ignore'])[30]").click()
+#Validate whether the Darkmode is working or not from the Frontend
+driver.find_element(By.XPATH,"(//span[contains(text(),'General Settings')])[1]").click()
+front_end_active=driver.find_element(By.XPATH,"(//p[normalize-space()='Turn ON to enable the darkmode in the frontend.'])[1]").text
+print(front_end_active)
+if front_end_active=="Turn ON to enable the darkmode in the frontend.":
+    print("Darkmode is not working on the frontend")
+else:
+    print("Darkmode is working on the frontend")
+
+
+#Enable “Darkmode Toggle Animation” & change the “Animation Effect”
+driver.find_element(By.XPATH,"(//a[@id='wp_dark_mode_animation-tab'])[1]").click()
+time.sleep(5)
+driver.find_element(By.XPATH,"(//label[@for='wppool-wp_dark_mode_animation[toggle_animation]'])[2]").click()
+time.sleep(5)
+
 dropdown=Select(driver.find_element(By.XPATH,"(//select[@id='wp_dark_mode_animation[animation]'])[1]"))
 #Change Animation
-dropdown.select_by_visible_text("Side Left")
-driver.find_element(By.ID,"save_settings").click()
+time.sleep(5)
+dropdown.select_by_index("3")
+time.sleep(5)
+driver.find_element(By.XPATH,"(//input[@id='save_settings'])[13]").click()
 
-#12.Validate whether the Darkmode is working or not from the Frontend.
-toggle_button=driver.find_element(By.XPATH,"wppool-wp_dark_mode_general[enable_frontend]")
-dark_mode_active=toggle_button.is_selected()
-if dark_mode_active:
-    print("Dark mode is active.")
-else:
-    print("Dark mode is not active.")
+
+# Clean up the driver instance
+driver.quit()
 
