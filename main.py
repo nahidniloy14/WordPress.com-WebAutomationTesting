@@ -69,3 +69,11 @@ driver.find_element(By.XPATH,"//div[normalize-space()='Settings']").click()
 driver.find_element(By.XPATH,"(//span[contains(text(),'General Settings')])[1]").click()
 #Enable Backend Darkmode
 driver.find_element(By.XPATH,"(//label[@for='wppool-wp_dark_mode_general[enable_backend]'])[2]").click()
+#valdiate the dark made working on admin dash
+toggle_button=driver.find_element(By.XPATH,"wppool-wp_dark_mode_general[enable_frontend]")
+dark_mode_active=toggle_button.is_selected()
+if dark_mode_active:
+    print("Dark mode is active.")
+else:
+    print("Dark mode is not active.")
+
